@@ -2,8 +2,8 @@ import csv, sqlite3
 
 if __name__ == "__main__":
 
-  sqlite_con = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
-  cur = sqlite_con.cursor()
+  sqlite= sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
+  cur = sqlite.cursor()
 
   cur.execute('''CREATE TABLE polaczenia (from_subscriber data_type INTEGER, 
                     to_subscriber data_type INTEGER, 
@@ -15,11 +15,10 @@ if __name__ == "__main__":
       reader = csv.reader(fin, delimiter = ";") 
       next(reader, None)
       rows = [x for x in reader]
-      cur.executemany("INSERT INTO polaczenia (from_subscriber, to_subscriber, datetime, duration , celltower) VALUES (?, ?, ?, ?, ?);", rows) #wartości oznaczane 
-      sqlite_con.commit() 
+      cur.executemany("INSERT INTO polaczenia (from_subscriber, to_subscriber, datetime, duration , celltower) VALUES (?, ?, ?, ?, ?);", rows)
 
-  sqlite_con
-  cursor=sqlite_con.cursor()
+  sqlite
+  cursor=sqlite.cursor()
   cursor.execute("Select sum(duration) from polaczenia")
   result = cursor.fetchone()
 
